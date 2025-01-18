@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 export const connectDb = async() =>{
     try {
         await mongoose.connect(process.env.MONGO_URL,{
-            dbName:"ai-powered-todo"
+            dbName:"atm-system"
         });   
         console.log(`Mongodb connected`);     
     } catch (error) {

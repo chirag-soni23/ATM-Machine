@@ -82,7 +82,7 @@ export const withdrawBalance = TryCatch(async(req,res)=>{
 
 // transaction history
 export const transactionHistory = TryCatch(async(req,res)=>{
-    const tranactions = await Atm.find({userId:req.user._id,type:{$in:['withdraw','deposit']}}).sort({timestamp:-1});
+    const tranactions = await Atm.find({userId:req.user._id,type:{$in:['withdraw','deposit','transfer']}}).sort({timestamp:-1});
 
     if(!tranactions.length){
         return res.status(404).json({message:"No transactions found."})
@@ -92,4 +92,51 @@ export const transactionHistory = TryCatch(async(req,res)=>{
         tranactions,
         message:"Transaction fetched successfully"
     })
+})
+
+// transfer money
+export const transferMoney = TryCatch(async(req,res)=>{
+    const { targetUserId, amount } = req.body;
+
+    if (amount <= 0) {
+        return res.status(400).json({ message: "Amount must be greater than zero." });
+    }
+
+    const sourceUser = await User.findById(req.user._id);
+    if (!sourceUser) {
+        return res.status(404).json({ message: "Source user not found." });
+    }
+
+    if (sourceUser.balance < amount) {
+        return res.status(400).json({ message: "Insufficient funds." });
+    }
+
+    const targetUser = await User.findById(targetUserId);
+    if (!targetUser) {
+        return res.status(404).json({ message: "Target user not found." });
+    }
+
+    sourceUser.balance -= amount;
+    targetUser.balance += amount;
+
+    await sourceUser.save();
+    await targetUser.save();
+
+    await Atm.create({
+        userId: sourceUser._id,
+        targetUserId: targetUser._id,
+        type: 'transfer',
+        amount,
+        status: 'success'
+    });
+
+    res.json({
+        message: "Transfer successful!",
+        sourceBalance: sourceUser.balance,
+        targetUser: {
+            id: targetUser._id,
+            name: targetUser.name,
+        },
+    });
+
 })

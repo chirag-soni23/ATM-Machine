@@ -6,15 +6,22 @@ const atmSchema = new mongoose.Schema({
         ref:"User",
         required:true,
     },
+    targetUserId:{
+        type:mongoose.Schema.ObjectId,
+        ref:"User",
+        required:function(){
+            return this.type == 'transfer'
+        }        
+    },
     type:{
         type:String,
-        enum:['withdraw', 'deposit', 'check_balance'],
+        enum:['withdraw', 'deposit', 'check_balance','transfer'],
         required:true,
     },
     amount:{
         type:Number,
         required:function(){
-            return this.type === 'withdraw' || this.type === 'deposit';
+            return ['withdraw', 'deposit', 'transfer'].includes(this.type);
         }
     },
     status:{
