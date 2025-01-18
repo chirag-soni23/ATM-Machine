@@ -1,10 +1,12 @@
 import express from 'express';
 import { isAuth } from '../middlewares/isAuth.js';
-import { depositMoney } from '../controllers/atmController.js';
+import { checkBalance, depositMoney, withdrawBalance } from '../controllers/atmController.js';
 
 const router = express.Router();
 
-router.post('/deposit',isAuth,depositMoney)
+router.post('/deposit',isAuth,depositMoney);
+router.get('/check-balance',isAuth,checkBalance);
+router.post('/withdraw',isAuth,withdrawBalance);
 
 
 export default router;
