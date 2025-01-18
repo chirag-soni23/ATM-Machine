@@ -19,6 +19,10 @@ const userSchema = new mongoose.Schema({
         id: String,
         url: String
     },
+    balance:{
+        type:Number,
+        default:0
+    }
 }, { timestamps: true });
 
 export const User = mongoose.model('user', userSchema);
