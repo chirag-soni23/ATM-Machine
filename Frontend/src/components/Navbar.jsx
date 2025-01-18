@@ -1,9 +1,15 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { CreditCard, LogOut, Settings, User } from "lucide-react";
 import { UserData } from "../context/UserContext";
 
 const Navbar = () => {
   const {logout} = UserData()
+  const navigate = useNavigate()
+  function logoutHandler(){
+    logout()
+    navigate('/login')
+
+  }
   return (
     <header
       className="bg-base-100 border-b border-base-300 fixed w-full top-0 z-40 
@@ -32,7 +38,7 @@ const Navbar = () => {
               <span className="hidden sm:inline">Settings</span>
             </Link>
 
-            <button className="flex gap-2 items-center" onClick={logout}>
+            <button className="flex gap-2 items-center" onClick={logoutHandler}>
                   <LogOut className="size-5" />
                   <span className="hidden sm:inline">Logout</span>
                 </button>
