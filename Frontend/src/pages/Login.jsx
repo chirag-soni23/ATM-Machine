@@ -1,12 +1,18 @@
 import { useState } from "react";
-import { CreditCard, Eye, EyeOff, Loader2, Lock, Mail, MessageSquare, User } from "lucide-react";
-import { Link } from "react-router-dom";
-import toast from "react-hot-toast";
+import { CreditCard, Eye, EyeOff, Loader2, Lock, Mail} from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { UserData } from "../context/UserContext";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const { loginUser, btnLoading } = UserData();
+  const navigate = useNavigate();
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    loginUser(email, password, navigate);
   };
 
   return (
@@ -22,8 +28,8 @@ const Login = () => {
               >
                 <CreditCard className="size-6 text-primary" />
               </div>
-              <h1 className="text-2xl font-bold mt-2">Welcome back</h1>
-              <p className="text-base-content/60">Sign in to your account</p>
+              <h1 className="text-2xl font-bold mt-2">Create Account</h1>
+              <p className="text-base-content/60">Get started with your free account</p>
             </div>
           </div>
 
@@ -40,6 +46,10 @@ const Login = () => {
                   type="email"
                   className={`input input-bordered w-full pl-10`}
                   placeholder="you@example.com"
+                  value={email}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                  }}
                 />
               </div>
             </div>
@@ -56,6 +66,10 @@ const Login = () => {
                   type={showPassword ? "text" : "password"}
                   className={`input input-bordered w-full pl-10`}
                   placeholder="••••••••"
+                  value={password}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                  }}
                 />
                 <button
                   type="button"
@@ -71,14 +85,14 @@ const Login = () => {
               </div>
             </div>
 
-            <button type="submit" className="btn btn-primary w-full">
-             Login
+            <button disabled={btnLoading} type="submit" className="btn btn-primary w-full">
+              {btnLoading ? <Loader2/> : "Login"}
             </button>
           </form>
 
           <div className="text-center">
             <p className="text-base-content/60">
-              Not member?{" "}
+              Not a member?{" "}
               <Link to="/register" className="link link-primary">
                 Register
               </Link>
@@ -89,4 +103,5 @@ const Login = () => {
     </div>
   );
 };
+
 export default Login;
