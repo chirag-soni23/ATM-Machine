@@ -79,3 +79,17 @@ export const withdrawBalance = TryCatch(async(req,res)=>{
         message: "Withdraw successfully!"
     })
 })
+
+// transaction history
+export const transactionHistory = TryCatch(async(req,res)=>{
+    const tranactions = await Atm.find({userId:req.user._id,type:{$in:['withdraw','deposit']}}).sort({timestamp:-1});
+
+    if(!tranactions.length){
+        return res.status(404).json({message:"No transactions found."})
+    }
+
+    res.json({
+        tranactions,
+        message:"Transaction fetched successfully"
+    })
+})
