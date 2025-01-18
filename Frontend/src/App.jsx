@@ -7,11 +7,15 @@ import Navbar from './components/Navbar'
 import { UserData } from './context/UserContext'
 import { Loading } from './components/Loading'
 import Settings from './pages/Settings'
+import { useThemeStore } from './context/useThemeStore'
 
 const App = () => {
   const {isAuth,loading} = UserData()
+    const { theme } = useThemeStore();
+  
   return (
-    <>
+
+    <div data-theme={theme}>
     {loading ? <Loading/> : <BrowserRouter> 
     {isAuth && <Navbar/>}
     <Routes>
@@ -21,7 +25,7 @@ const App = () => {
       <Route path='/register' element={<Register/>}/>
     </Routes>
     </BrowserRouter>}
-    </>
+    </div>
   )
 }
 
