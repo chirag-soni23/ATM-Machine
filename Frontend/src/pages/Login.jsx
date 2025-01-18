@@ -28,8 +28,8 @@ const Login = () => {
               >
                 <CreditCard className="size-6 text-primary" />
               </div>
-              <h1 className="text-2xl font-bold mt-2">Create Account</h1>
-              <p className="text-base-content/60">Get started with your free account</p>
+              <h1 className="text-2xl font-bold mt-2">Welcome back</h1>
+              <p className="text-base-content/60">Sign in to your account</p>
             </div>
           </div>
 
@@ -63,7 +63,7 @@ const Login = () => {
                   <Lock className="size-5 text-base-content/40" />
                 </div>
                 <input
-                  type={showPassword ? "text" : "password"}
+                  type={showPassword ? "password" : "text"}
                   className={`input input-bordered w-full pl-10`}
                   placeholder="••••••••"
                   value={password}

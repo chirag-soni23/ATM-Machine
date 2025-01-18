@@ -92,7 +92,7 @@ const Register = () => {
                   <Lock className="size-5 text-base-content/40" />
                 </div>
                 <input
-                  type={showPassword ? "text" : "password"}
+                  type={showPassword ? "password" : "text"}
                   className={`input input-bordered w-full pl-10`}
                   placeholder="••••••••"
                   value={password}
