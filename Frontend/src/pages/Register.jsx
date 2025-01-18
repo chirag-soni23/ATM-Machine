@@ -2,18 +2,26 @@ import { useState } from "react";
 import { CreditCard, Eye, EyeOff, Loader2, Lock, Mail, User } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { UserData } from "../context/UserContext";
+import toast from "react-hot-toast";
 
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const [name,setName] = useState("");
-  const [email,setEmail] = useState("")
-  const [password,setPassword] = useState("");
-  const {registerUser} = UserData();
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const { registerUser, btnLoading } = UserData();
   const navigate = useNavigate();
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    registerUser(name,email,password,navigate)
+    if(!name.trim()){
+      return toast.error("Full Name is required")
+    }
+    if (password.length < 6) {
+      return toast.error("Password must be at least 6 characters long");
+    }
 
+    registerUser(name, email, password, navigate);
   };
 
   return (
@@ -48,7 +56,9 @@ const Register = () => {
                   className={`input input-bordered w-full pl-10`}
                   placeholder="John Doe"
                   value={name}
-                  onChange={(e)=>{setName(e.target.value)}}
+                  onChange={(e) => {
+                    setName(e.target.value);
+                  }}
                 />
               </div>
             </div>
@@ -66,7 +76,9 @@ const Register = () => {
                   className={`input input-bordered w-full pl-10`}
                   placeholder="you@example.com"
                   value={email}
-                  onChange={(e)=>{setEmail(e.target.value)}}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                  }}
                 />
               </div>
             </div>
@@ -84,7 +96,9 @@ const Register = () => {
                   className={`input input-bordered w-full pl-10`}
                   placeholder="••••••••"
                   value={password}
-                  onChange={(e)=>{setPassword(e.target.value)}}                  
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                  }}
                 />
                 <button
                   type="button"
@@ -100,8 +114,8 @@ const Register = () => {
               </div>
             </div>
 
-            <button type="submit" className="btn btn-primary w-full">
-             Create Account
+            <button disabled={btnLoading} type="submit" className="btn btn-primary w-full">
+              {btnLoading ? <Loader2/> : "Create Account"}
             </button>
           </form>
 
@@ -118,4 +132,5 @@ const Register = () => {
     </div>
   );
 };
+
 export default Register;
