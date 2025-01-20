@@ -1,6 +1,6 @@
 import express from 'express';
 import { isAuth } from '../middlewares/isAuth.js';
-import { checkBalance, depositMoney, transactionHistory, transferMoney, withdrawBalance } from '../controllers/atmController.js';
+import { checkBalance, deleteTransactionHistory, depositMoney, transactionHistory, transferMoney, withdrawBalance } from '../controllers/atmController.js';
 
 const router = express.Router();
 
@@ -9,6 +9,7 @@ router.get('/check-balance',isAuth,checkBalance);
 router.post('/withdraw',isAuth,withdrawBalance);
 router.get('/get-trans',isAuth,transactionHistory);
 router.post('/transfer',isAuth,transferMoney)
+router.delete('/delete_transaction_history',isAuth,deleteTransactionHistory)
 
 
 export default router;

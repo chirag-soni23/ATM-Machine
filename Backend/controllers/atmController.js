@@ -140,3 +140,21 @@ export const transferMoney = TryCatch(async(req,res)=>{
     });
 
 })
+
+// delete Transaction history
+export const deleteTransactionHistory = TryCatch(async (req, res) => {
+    const { transactionId, deleteAll } = req.body; 
+
+    if (deleteAll) {
+        await Atm.deleteMany({ userId: req.user._id });
+        res.json({ message: "All transactions deleted successfully." });
+    } else if (transactionId) {
+        const transaction = await Atm.findByIdAndDelete(transactionId);
+        if (!transaction) {
+            return res.status(404).json({ message: "Transaction not found." });
+        }
+        res.json({ message: "Transaction deleted successfully." });
+    } else {
+        return res.status(400).json({ message: "Either transactionId or deleteAll flag is required." });
+    }
+});
