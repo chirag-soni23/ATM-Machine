@@ -1,0 +1,111 @@
+import { createContext, useContext, useEffect, useState } from 'react'
+import toast from 'react-hot-toast'
+import axios from 'axios'
+
+const AtmContext = createContext();
+
+export const AtmProvider = ({children})=>{
+    const [balance,setBalance] = useState(0);
+    const [transactions,setTrasactions] = useState([])
+    const [loading,setLoading] = useState(false);
+
+    // deposit money
+    async function depositMoney(amount){
+        if(amount<=0){
+            toast.error("Amount must be greater than zero.")
+            return;
+        }
+        setLoading(true)
+        try {
+            const { data } = await axios.post('/api/user/deposit',{amount});
+            setBalance(data.balance);
+            toast.success(data.message);
+            fetchTransactionHistory()
+            setLoading(false)
+
+        } catch (error) {
+            toast.error(error.response.data.message)
+            setLoading(false);            
+        }
+    }
+
+    // withdraw money
+    async function withdrawMoney(amount){
+        if(amount<=0){
+            toast.error("Amount must be greater than zero.")
+            return;
+        }
+        setLoading(true);
+        try {
+            const { data } = await axios.post('/api/user/withdraw',{amount});
+            setBalance(data.balance);
+            toast.success(data.message);
+            fetchTransactionHistory();
+            setLoading(false);           
+        } catch (error) {
+            toast.error(error.response.data.message)
+            setLoading(false);                        
+        }
+    }
+
+    // check balance
+    async function checkBalance(){
+        setLoading(true);
+        try {
+            const { data } = await axios.get('/api/atm/check-balance');
+            setBalance(data.balance);
+            toast.success(data.message);
+            setLoading(false);
+        } catch (error) {
+            toast.error(error.response.data.message)
+            setLoading(false);
+            
+        }
+    }
+
+    // transfer money
+    async function transferMoney(tragetUserId,amount){
+        if(amount<=0){
+            toast.error("Amount must be greater than zero.")
+            return;
+        } 
+        setLoading(true);
+        try {
+            const { data } = await axios.post('/api/atm/transfer',{tragetUserId,amount})
+            setBalance(data.sourceBalance);
+            toast.success(data.message);
+            fetchTransactionHistory();
+            setLoading(false);            
+        } catch (error) {
+            toast.error(error.response.data.message)
+            setLoading(false);
+        }       
+    }
+
+
+    // fetchTransaction history
+    async function fetchTransactionHistory() {
+        setLoading(true)
+        try {
+            const { data } = await axios.get('/api/atm/get-trans')
+            setTrasactions(data.transactions)
+            setLoading(false);            
+        } catch (error) {
+            toast.error(error.response.data.message);
+            setLoading(false);            
+        }        
+    }
+
+    // useEffect(()=>{
+    //     fetchTransactionHistory()
+    // },[])
+
+    return(
+        <AtmContext.Provider value={{balance,transactions,loading,depositMoney,withdrawMoney,fetchTransactionHistory,checkBalance,transferMoney}}>
+            {children}
+        </AtmContext.Provider>
+    )
+
+}
+
+export const AtmData = () => useContext(AtmContext);
