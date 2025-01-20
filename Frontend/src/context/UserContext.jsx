@@ -3,7 +3,7 @@ import toast, { Toaster } from 'react-hot-toast';
 import axios from 'axios';
 import { useEffect } from "react";
 
-const UserContext = createContext()
+const UserContext = createContext();
 export const UserProvider = ({ children }) => {
     const [user, setUser] = useState([]);
     const [isAuth, setIsAuth] = useState(false);
@@ -19,7 +19,7 @@ export const UserProvider = ({ children }) => {
             setBtnLoading(false);
             navigate("/");
         } catch (error) {
-            toast.error(error.response.data.message)
+            toast.error(error.response.data.message);
             setBtnLoading(false);
         }
     }
@@ -33,13 +33,12 @@ export const UserProvider = ({ children }) => {
             setIsAuth(true);
             setBtnLoading(false);
             navigate("/");
-
         } catch (error) {
-            toast.error(error.response.data.message)
+            toast.error(error.response.data.message);
             setBtnLoading(false);
-
         }
     }
+
     const [loading, setLoading] = useState(true);
     async function fetchUser() {
         try {
@@ -65,14 +64,54 @@ export const UserProvider = ({ children }) => {
             setIsAuth(false);
             setLoading(false);
         } catch (error) {
-            toast.error(error.response.data.message)
+            toast.error(error.response.data.message);
         } finally {
             setBtnLoading(false);
         }
     }
 
-    return <UserContext.Provider value={{ loginUser, btnLoading, isAuth, user, loading, registerUser, logout }}>{children}
-        <Toaster /></UserContext.Provider>
-}
+    // Update Profile Picture
+    async function updateProfilePic(file) {
+        setBtnLoading(true);
+        try {
+            const formData = new FormData();
+            formData.append("file", file);
+
+            const { data } = await axios.post("/api/user/updatepic", formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            });
+
+            toast.success(data.message);
+            setUser((prev) => ({
+                ...prev,
+                image: data.image,
+            }));
+        } catch (error) {
+            toast.error(error.response?.data?.message || "Failed to update profile picture.");
+        } finally {
+            setBtnLoading(false);
+        }
+    }
+
+    return (
+        <UserContext.Provider
+            value={{
+                loginUser,
+                btnLoading,
+                isAuth,
+                user,
+                loading,
+                registerUser,
+                logout,
+                updateProfilePic,
+            }}
+        >
+            {children}
+            <Toaster />
+        </UserContext.Provider>
+    );
+};
 
 export const UserData = () => useContext(UserContext);
