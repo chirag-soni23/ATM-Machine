@@ -82,7 +82,7 @@ export const withdrawBalance = TryCatch(async(req,res)=>{
 
 // transaction history
 export const transactionHistory = TryCatch(async (req, res) => {
-    // Get transactions for the user
+    // Fetch transactions of the current user
     const transactions = await Atm.find({
       userId: req.user._id,
       type: { $in: ['withdraw', 'deposit', 'transfer'] },
@@ -92,13 +92,21 @@ export const transactionHistory = TryCatch(async (req, res) => {
       return res.status(404).json({ message: "No transactions found." });
     }
   
-    // Manually fetch user data for each transaction
+    // Fetch user details for source and target users
     const transactionsWithUserData = await Promise.all(transactions.map(async (transaction) => {
-      const user = await User.findById(transaction.userId).select('name mobileNumber');
+      const sourceUser = await User.findById(transaction.userId).select('name mobileNumber');
+      
+      let targetUser = null;
+      if (transaction.type === 'transfer' && transaction.targetUserId) {
+        targetUser = await User.findById(transaction.targetUserId).select('name mobileNumber');
+      }
+  
       return {
         ...transaction.toObject(),
-        userName: user.name,
-        userMobile: user.mobileNumber,
+        userName: sourceUser.name,
+        userMobile: sourceUser.mobileNumber,
+        targetUserName: targetUser ? targetUser.name : null,
+        targetUserMobile: targetUser ? targetUser.mobileNumber : null,
       };
     }));
   
@@ -107,6 +115,8 @@ export const transactionHistory = TryCatch(async (req, res) => {
       message: "Transaction fetched successfully"
     });
   });
+  
+  
 
 
 // transfer money
