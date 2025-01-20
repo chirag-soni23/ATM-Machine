@@ -6,7 +6,7 @@ const AtmContext = createContext();
 
 export const AtmProvider = ({children})=>{
     const [balance,setBalance] = useState(0);
-    const [transactions,setTrasactions] = useState([])
+    const [transactions,setTransactions] = useState([])
     const [loading,setLoading] = useState(false);
 
     // deposit money
@@ -88,7 +88,7 @@ export const AtmProvider = ({children})=>{
         setLoading(true)
         try {
             const { data } = await axios.get('/api/atm/get-trans')
-            setTrasactions(data.transactions)
+            setTransactions(data.transactions)
             setLoading(false);            
         } catch (error) {
             toast.error(error.response.data.message);
@@ -96,12 +96,30 @@ export const AtmProvider = ({children})=>{
         }        
     }
 
+    // delete transaction
+    const deleteTransactionHistory = async (transactionId, deleteAll) => {
+        setLoading(true);
+        try {
+          const { data } = await axios.post('/api/atm/delete_transaction_history', { transactionId, deleteAll });
+          if (deleteAll) {
+            setTransactions([]); // Clear all transactions
+          } else {
+            setTransactions(prevTransactions => prevTransactions.filter(transaction => transaction._id !== transactionId)); // Remove specific transaction
+          }
+          toast.success(data.message);
+        } catch (error) {
+          toast.error(error.response.data.message);
+        } 
+    }
+
+    
+
     // useEffect(()=>{
     //     fetchTransactionHistory()
     // },[])
 
     return(
-        <AtmContext.Provider value={{balance,transactions,loading,depositMoney,withdrawMoney,fetchTransactionHistory,checkBalance,transferMoney}}>
+        <AtmContext.Provider value={{balance,transactions,loading,depositMoney,withdrawMoney,fetchTransactionHistory,checkBalance,transferMoney,deleteTransactionHistory}}>
             {children}
         </AtmContext.Provider>
     )
