@@ -19,8 +19,8 @@ const TransHistory = () => {
         <thead>
           <tr>
             <th></th>
-            <th>Source Name</th>
-            <th>Source Mobile</th>
+            <th>Your Name</th>
+            <th>Your Mobile</th>
             <th>Target Name</th>
             <th>Target Mobile</th>
             <th>Amount</th>
