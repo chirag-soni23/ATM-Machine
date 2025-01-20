@@ -9,6 +9,7 @@ import { Loading } from './components/Loading'
 import Settings from './pages/Settings'
 import { useThemeStore } from './context/useThemeStore'
 import Profile from './pages/Profile'
+import TransHistory from './pages/TransHistory'
 
 const App = () => {
   const {isAuth,loading} = UserData()
@@ -23,6 +24,7 @@ const App = () => {
       <Route path='/' element={isAuth ? <Home/> : <Login/>}/>
       <Route path='/profile' element={isAuth ? <Profile/> : <Login/>}/>
       <Route path='/settings' element={isAuth ? <Settings/> : <Login/>}/>
+      <Route path='/transaction-history' element={isAuth ? <TransHistory/> : <Login/>}/>
       <Route path='/login' element={isAuth ? <Home/> : <Login/>}/>
       <Route path='/register' element={<Register/>}/>
     </Routes>

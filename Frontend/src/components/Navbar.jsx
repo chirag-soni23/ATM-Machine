@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { CreditCard, LogOut, Settings, User } from "lucide-react";
+import { CreditCard, History, LogOut, Settings, User } from "lucide-react";
 import { UserData } from "../context/UserContext";
 
 const Navbar = () => {
@@ -46,6 +46,16 @@ const Navbar = () => {
             >
               <User className="w-4 h-4" />
               <span className="hidden sm:inline">Profile</span>
+            </Link>
+            <Link
+              to="/transaction-history"
+              className={`
+              btn btn-sm gap-2 transition-colors
+              
+              `}
+            >
+              <History className="w-4 h-4" />
+              <span className="hidden sm:inline">Transaction Hitory</span>
             </Link>
 
             <button className="flex gap-2 items-center" onClick={logoutHandler}>
