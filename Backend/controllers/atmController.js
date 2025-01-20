@@ -114,15 +114,11 @@ export const transactionHistory = TryCatch(async (req, res) => {
       transactions: transactionsWithUserData,
       message: "Transaction fetched successfully"
     });
-  });
+});
   
-  
-
-
 // transfer money
-
 export const transferMoney = TryCatch(async (req, res) => {
-    const { targetMobileNumber, amount } = req.body; // Accept target mobile number instead of targetUserId
+    const { targetMobileNumber, amount } = req.body;
 
     if (amount <= 0) {
         return res.status(400).json({ message: "Amount must be greater than zero." });
@@ -137,20 +133,22 @@ export const transferMoney = TryCatch(async (req, res) => {
         return res.status(400).json({ message: "Insufficient funds." });
     }
 
-    // Find the target user by mobile number
     const targetUser = await User.findOne({ mobileNumber: targetMobileNumber });
     if (!targetUser) {
         return res.status(404).json({ message: "Target user not found." });
     }
 
-    // Deduct the amount from the source user's balance and add it to the target user's balance
+    
+    if (sourceUser._id.toString() === targetUser._id.toString()) {
+        return res.status(400).json({ message: "You cannot transfer money to yourself." });
+    }
+
     sourceUser.balance -= amount;
     targetUser.balance += amount;
 
     await sourceUser.save();
     await targetUser.save();
 
-    // Record the transaction in the ATM history
     await Atm.create({
         userId: sourceUser._id,
         targetUserId: targetUser._id,
@@ -169,7 +167,6 @@ export const transferMoney = TryCatch(async (req, res) => {
         },
     });
 });
-
 
 // delete Transaction history
 export const deleteTransactionHistory = TryCatch(async (req, res) => {
