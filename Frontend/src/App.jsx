@@ -17,7 +17,7 @@ const App = () => {
   
   return (
 
-    <div data-theme={theme}>
+    <div data-theme={theme} className='h-full p-4'>
     {loading ? <Loading/> : <BrowserRouter> 
     {isAuth && <Navbar/>}
     <Routes>

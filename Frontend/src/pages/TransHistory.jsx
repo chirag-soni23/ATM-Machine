@@ -39,7 +39,7 @@ const TransHistory = () => {
   return (
     <div className="overflow-x-auto mt-[4rem]">
       {/* Search Input */}
-      <div className='w-full flex justify-between items-center p-4'>
+      <div className='w-full flex justify-between items-center p-4 gap-4'>
       <div className="mb-4">
         <input
           type="text"
