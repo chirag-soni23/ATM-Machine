@@ -5,11 +5,11 @@ const TransHistory = () => {
   const { transactions, fetchTransactionHistory, loading } = AtmData();
 
   useEffect(() => {
-    fetchTransactionHistory(); // Fetch the transaction history on component mount
+    fetchTransactionHistory(); 
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>; // Optional: Add loading indicator while data is being fetched
+    return <div>Loading...</div>; 
   }
 
   return (
@@ -30,7 +30,6 @@ const TransHistory = () => {
           </tr>
         </thead>
         <tbody>
-          {/* Map through transactions and display them */}
           {transactions && transactions.length > 0 ? (
             transactions.map((transaction, index) => (
               <tr key={transaction._id}>
