@@ -19,7 +19,7 @@ const TransHistory = () => {
   };
 
   return (
-    <div className="overflow-x-auto mt-20">
+    <div className="overflow-x-auto mt-[4rem]">
       <div className="mb-4">
         <button 
           onClick={handleDeleteAll} 
