@@ -37,6 +37,16 @@ const Navbar = () => {
               <Settings className="w-4 h-4" />
               <span className="hidden sm:inline">Settings</span>
             </Link>
+            <Link
+              to="/profile"
+              className={`
+              btn btn-sm gap-2 transition-colors
+              
+              `}
+            >
+              <User className="w-4 h-4" />
+              <span className="hidden sm:inline">Profile</span>
+            </Link>
 
             <button className="flex gap-2 items-center" onClick={logoutHandler}>
                   <LogOut className="size-5" />
