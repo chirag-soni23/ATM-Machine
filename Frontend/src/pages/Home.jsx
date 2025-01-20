@@ -1,8 +1,17 @@
 import React from 'react'
+import { UserData } from '../context/UserContext';
+import avatar from '../assets/avatar.png'
 
 const Home = () => {
+  const { user } = UserData();
   return (
-    <div></div>
+    <div className='mt-20'>
+  <div className="avatar">
+    <div className="w-24 rounded-full">
+      <img src={user.image?.url || avatar} />
+    </div>
+  </div>
+  </div>
   )
 }
 

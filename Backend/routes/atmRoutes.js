@@ -9,7 +9,7 @@ router.get('/check-balance',isAuth,checkBalance);
 router.post('/withdraw',isAuth,withdrawBalance);
 router.get('/get-trans',isAuth,transactionHistory);
 router.post('/transfer',isAuth,transferMoney)
-router.delete('/delete_transaction_history',isAuth,deleteTransactionHistory)
+router.post('/delete_transaction_history',isAuth,deleteTransactionHistory)
 
 
 export default router;

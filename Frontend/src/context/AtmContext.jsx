@@ -102,9 +102,9 @@ export const AtmProvider = ({children})=>{
         try {
           const { data } = await axios.post('/api/atm/delete_transaction_history', { transactionId, deleteAll });
           if (deleteAll) {
-            setTransactions([]); // Clear all transactions
+            setTransactions([]);
           } else {
-            setTransactions(prevTransactions => prevTransactions.filter(transaction => transaction._id !== transactionId)); // Remove specific transaction
+            setTransactions(prevTransactions => prevTransactions.filter(transaction => transaction._id !== transactionId)); 
           }
           toast.success(data.message);
         } catch (error) {

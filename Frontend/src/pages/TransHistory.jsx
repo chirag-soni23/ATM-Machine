@@ -1,19 +1,33 @@
 import React, { useEffect } from 'react';
 import { AtmData } from '../context/AtmContext';
+import { Trash2 } from 'lucide-react'
 
 const TransHistory = () => {
-  const { transactions, fetchTransactionHistory, loading } = AtmData();
+  const { transactions, fetchTransactionHistory, loading, deleteTransactionHistory } = AtmData();
 
   useEffect(() => {
-    fetchTransactionHistory(); 
+    fetchTransactionHistory();
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>; 
+    return <div>Loading...</div>;
   }
+
+  // Handle delete all transactions
+  const handleDeleteAll = () => {
+    deleteTransactionHistory(null, true); 
+  };
 
   return (
     <div className="overflow-x-auto mt-20">
+      <div className="mb-4">
+        <button 
+          onClick={handleDeleteAll} 
+          className="btn btn-danger"
+        >
+          Delete All Transactions
+        </button>
+      </div>
       <table className="table">
         {/* Table Head */}
         <thead>
@@ -27,6 +41,7 @@ const TransHistory = () => {
             <th>Type</th>
             <th>Status</th>
             <th>Timestamp</th>
+            <th>Actions</th> {/* Added Actions column */}
           </tr>
         </thead>
         <tbody>
@@ -42,11 +57,19 @@ const TransHistory = () => {
                 <td>{transaction.type}</td>
                 <td>{transaction.status}</td>
                 <td>{new Date(transaction.timestamp).toLocaleString()}</td>
+                <td>
+                  <button 
+                    onClick={() => deleteTransactionHistory(transaction._id, false)} 
+                    className="btn btn-warning"
+                  >
+                    <Trash2 className='w-4 h-4' />
+                  </button>
+                </td> {/* Added Delete button */}
               </tr>
             ))
           ) : (
             <tr>
-              <td colSpan="9" className="text-center">No transactions found</td>
+              <td colSpan="10" className="text-center">No transactions found</td>
             </tr>
           )}
         </tbody>
