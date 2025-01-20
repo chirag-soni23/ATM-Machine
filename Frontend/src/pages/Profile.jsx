@@ -1,7 +1,8 @@
 import { Camera, Mail, User } from "lucide-react";
+import { UserData } from "../context/UserContext";
 
 const Profile = () => {
-
+  const {user} = UserData();
   return (
     <div className="h-screen pt-20">
       <div className="max-w-2xl mx-auto p-4 py-8">
@@ -52,7 +53,7 @@ const Profile = () => {
                 <User className="w-4 h-4" />
                 Full Name
               </div>
-              <p className="px-4 py-2.5 bg-base-200 rounded-lg border">Chirag Soni</p>
+              <p className="px-4 py-2.5 bg-base-200 rounded-lg border">{user.name}</p>
             </div>
 
             <div className="space-y-1.5">
@@ -60,7 +61,7 @@ const Profile = () => {
                 <Mail className="w-4 h-4" />
                 Email Address
               </div>
-              <p className="px-4 py-2.5 bg-base-200 rounded-lg border">csoni0693@gmail.com</p>
+              <p className="px-4 py-2.5 bg-base-200 rounded-lg border">{user.email}</p>
             </div>
           </div>
         </div>
