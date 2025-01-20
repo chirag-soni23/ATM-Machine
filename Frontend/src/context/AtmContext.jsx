@@ -91,7 +91,6 @@ export const AtmProvider = ({children})=>{
             setTransactions(data.transactions)
             setLoading(false);            
         } catch (error) {
-            toast.error(error.response.data.message);
             setLoading(false);            
         }        
     }
