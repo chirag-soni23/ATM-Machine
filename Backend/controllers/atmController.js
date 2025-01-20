@@ -81,22 +81,38 @@ export const withdrawBalance = TryCatch(async(req,res)=>{
 })
 
 // transaction history
-export const transactionHistory = TryCatch(async(req,res)=>{
-    const tranactions = await Atm.find({userId:req.user._id,type:{$in:['withdraw','deposit','transfer']}}).sort({timestamp:-1});
-
-    if(!tranactions.length){
-        return res.status(404).json({message:"No transactions found."})
+export const transactionHistory = TryCatch(async (req, res) => {
+    // Get transactions for the user
+    const transactions = await Atm.find({
+      userId: req.user._id,
+      type: { $in: ['withdraw', 'deposit', 'transfer'] },
+    }).sort({ timestamp: -1 });
+  
+    if (!transactions.length) {
+      return res.status(404).json({ message: "No transactions found." });
     }
-
+  
+    // Manually fetch user data for each transaction
+    const transactionsWithUserData = await Promise.all(transactions.map(async (transaction) => {
+      const user = await User.findById(transaction.userId).select('name mobileNumber');
+      return {
+        ...transaction.toObject(),
+        userName: user.name,
+        userMobile: user.mobileNumber,
+      };
+    }));
+  
     res.json({
-        tranactions,
-        message:"Transaction fetched successfully"
-    })
-})
+      transactions: transactionsWithUserData,
+      message: "Transaction fetched successfully"
+    });
+  });
+
 
 // transfer money
-export const transferMoney = TryCatch(async(req,res)=>{
-    const { targetUserId, amount } = req.body;
+
+export const transferMoney = TryCatch(async (req, res) => {
+    const { targetMobileNumber, amount } = req.body; // Accept target mobile number instead of targetUserId
 
     if (amount <= 0) {
         return res.status(400).json({ message: "Amount must be greater than zero." });
@@ -111,17 +127,20 @@ export const transferMoney = TryCatch(async(req,res)=>{
         return res.status(400).json({ message: "Insufficient funds." });
     }
 
-    const targetUser = await User.findById(targetUserId);
+    // Find the target user by mobile number
+    const targetUser = await User.findOne({ mobileNumber: targetMobileNumber });
     if (!targetUser) {
         return res.status(404).json({ message: "Target user not found." });
     }
 
+    // Deduct the amount from the source user's balance and add it to the target user's balance
     sourceUser.balance -= amount;
     targetUser.balance += amount;
 
     await sourceUser.save();
     await targetUser.save();
 
+    // Record the transaction in the ATM history
     await Atm.create({
         userId: sourceUser._id,
         targetUserId: targetUser._id,
@@ -136,10 +155,11 @@ export const transferMoney = TryCatch(async(req,res)=>{
         targetUser: {
             id: targetUser._id,
             name: targetUser.name,
+            mobileNumber: targetUser.mobileNumber, // Send mobile number as part of the response
         },
     });
+});
 
-})
 
 // delete Transaction history
 export const deleteTransactionHistory = TryCatch(async (req, res) => {

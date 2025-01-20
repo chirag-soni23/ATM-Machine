@@ -7,14 +7,14 @@ import cloudinary from 'cloudinary'
 
 // Register 
 export const registerUser = TryCatch(async(req,res)=>{
-    const {name,email,password} = req.body;
-    let user = await User.findOne({email});
+    const {name,email,password, mobileNumber} = req.body;
+    let user = await User.findOne({ $or: [{ email }, { mobileNumber }] });
     if(user){
         return res.status(400).json({message:"Already have an account"})
     };
     const hashPassword = await bcrypt.hash(password,10);
     user = await User.create({
-        name,email,password:hashPassword
+        name,email,password:hashPassword,mobileNumber
     });
     
     // JSON Web Token

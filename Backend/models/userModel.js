@@ -26,6 +26,12 @@ const userSchema = new mongoose.Schema({
     isAdmin:{
         type:Boolean,
         default:false
+    },
+    mobileNumber:{
+        type:String,
+        required:true,
+        unique:true,
+        match:/^[0-9]{10}$/,
     }
 }, { timestamps: true });
 

@@ -64,14 +64,14 @@ export const AtmProvider = ({children})=>{
     }
 
     // transfer money
-    async function transferMoney(tragetUserId,amount){
+    async function transferMoney(tragetUserMobileNumber,amount){
         if(amount<=0){
             toast.error("Amount must be greater than zero.")
             return;
         } 
         setLoading(true);
         try {
-            const { data } = await axios.post('/api/atm/transfer',{tragetUserId,amount})
+            const { data } = await axios.post('/api/atm/transfer',{tragetUserMobileNumber,amount})
             setBalance(data.sourceBalance);
             toast.success(data.message);
             fetchTransactionHistory();

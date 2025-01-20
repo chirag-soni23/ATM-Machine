@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { CreditCard, Eye, EyeOff, Loader2, Lock, Mail, User } from "lucide-react";
+import { CreditCard, Eye, EyeOff, Loader2, Lock, Mail, Phone, User } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { UserData } from "../context/UserContext";
 import toast from "react-hot-toast";
@@ -9,19 +9,23 @@ const Register = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [mobileNumber, setMobileNumber] = useState("");  // State for mobile number
   const { registerUser, btnLoading } = UserData();
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if(!name.trim()){
-      return toast.error("Full Name is required")
+    if (!name.trim()) {
+      return toast.error("Full Name is required");
     }
     if (password.length < 6) {
       return toast.error("Password must be at least 6 characters long");
     }
-
-    registerUser(name, email, password, navigate);
+    if (!mobileNumber.trim()) {
+      return toast.error("Mobile number is required");
+    }
+    // Add your mobile number validation here (e.g., regex for phone number)
+    registerUser(name, email, password, mobileNumber, navigate);  // Pass mobile number to registerUser
   };
 
   return (
@@ -83,6 +87,27 @@ const Register = () => {
               </div>
             </div>
 
+            {/* Mobile Number */}
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text font-medium">Mobile Number</span>
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <Phone className="size-5 text-base-content/40" />
+                </div>
+                <input
+                  type="text"
+                  className={`input input-bordered w-full pl-10`}
+                  placeholder="123-456-7890"
+                  value={mobileNumber}
+                  onChange={(e) => {
+                    setMobileNumber(e.target.value);
+                  }}
+                />
+              </div>
+            </div>
+
             <div className="form-control">
               <label className="label">
                 <span className="label-text font-medium">Password</span>
@@ -115,7 +140,7 @@ const Register = () => {
             </div>
 
             <button disabled={btnLoading} type="submit" className="btn btn-primary w-full">
-              {btnLoading ? <Loader2/> : "Create Account"}
+              {btnLoading ? <Loader2 /> : "Create Account"}
             </button>
           </form>
 

@@ -1,6 +1,7 @@
-import { Camera, Mail, User } from "lucide-react";
+import { Camera, Mail, Phone, User } from "lucide-react";
 import { UserData } from "../context/UserContext";
 import { useState } from "react";
+import avatar from '../assets/avatar.png'
 
 // Modal Component with Animations and Styling
 const Modal = ({ isOpen, onClose, imageUrl }) => {
@@ -34,7 +35,7 @@ const Modal = ({ isOpen, onClose, imageUrl }) => {
 const Profile = () => {
   const { user, updateProfilePic, btnLoading } = UserData();
   const [uploading, setUploading] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false); // State for modal visibility
+  const [isModalOpen, setIsModalOpen] = useState(false); 
 
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
@@ -42,7 +43,7 @@ const Profile = () => {
 
     setUploading(true);
     try {
-      await updateProfilePic(file); // Call the updateProfilePic function from context
+      await updateProfilePic(file); 
     } catch (error) {
       console.error("Error uploading image:", error);
     } finally {
@@ -50,8 +51,8 @@ const Profile = () => {
     }
   };
 
-  const openModal = () => setIsModalOpen(true); // Open the modal
-  const closeModal = () => setIsModalOpen(false); // Close the modal
+  const openModal = () => setIsModalOpen(true); 
+  const closeModal = () => setIsModalOpen(false); 
 
   return (
     <div className="h-screen pt-20">
@@ -66,7 +67,7 @@ const Profile = () => {
           <div className="flex flex-col items-center gap-4">
             <div className="relative">
               <img
-                src={user.image?.url || "/default-avatar.png"}
+                src={user.image?.url || avatar}
                 alt="Profile"
                 className="size-32 rounded-full object-cover border-4 cursor-pointer transition-transform transform hover:scale-110"
                 onClick={openModal} // Open modal on image click
@@ -118,6 +119,15 @@ const Profile = () => {
               </div>
               <p className="px-4 py-2.5 bg-base-200 rounded-lg border">
                 {user.email || "N/A"}
+              </p>
+            </div>
+            <div className="space-y-1.5">
+              <div className="text-sm text-zinc-400 flex items-center gap-2">
+                <Phone className="w-4 h-4" />
+                Mobile Number
+              </div>
+              <p className="px-4 py-2.5 bg-base-200 rounded-lg border">
+                {user.mobileNumber || "N/A"}
               </p>
             </div>
           </div>

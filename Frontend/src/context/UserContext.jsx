@@ -9,10 +9,10 @@ export const UserProvider = ({ children }) => {
     const [isAuth, setIsAuth] = useState(false);
     const [btnLoading, setBtnLoading] = useState(false);
 
-    async function registerUser(name, email, password, navigate) {
+    async function registerUser(name, email, password,mobileNumber, navigate) {
         setBtnLoading(true);
         try {
-            const { data } = await axios.post("/api/user/register", { name, email, password });
+            const { data } = await axios.post("/api/user/register", { name, email, password,mobileNumber });
             toast.success(data.message);
             setUser(data.user);
             setIsAuth(true);
