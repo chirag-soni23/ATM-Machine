@@ -4,8 +4,8 @@ import { Trash2 } from 'lucide-react';
 
 const TransHistory = () => {
   const { transactions, fetchTransactionHistory, loading, deleteTransactionHistory } = AtmData();
-  const [searchQuery, setSearchQuery] = useState(""); // State to store the search query
-  const [filteredTransactions, setFilteredTransactions] = useState([]); // State for filtered transactions
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filteredTransactions, setFilteredTransactions] = useState([]);
 
   useEffect(() => {
     fetchTransactionHistory();
