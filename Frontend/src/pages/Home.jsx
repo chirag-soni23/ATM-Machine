@@ -40,7 +40,7 @@ const Home = () => {
         <div className="card-body">
           <h2 className="card-title">Current Balance</h2>
           <p className="text-base font-semibold">
-            ₹ {loading ? 'Loading...' : balance.toFixed(2)}
+            ₹ {loading ? balance.toFixed(2) : balance.toFixed(2)}
           </p>
           <div className="card-actions justify-end">
             <form onSubmit={handleSubmit} className="flex gap-4">
