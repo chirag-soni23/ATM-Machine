@@ -20,7 +20,6 @@ export const AtmProvider = ({children})=>{
             const { data } = await axios.post('/api/atm/deposit',{amount});
             fetchTransactionHistory();
             setBalance(data.balance);
-            toast.success(data.message);
         } catch (error) {
             toast.error(error.response.data.message)
             setLoading(false);            
@@ -52,7 +51,6 @@ export const AtmProvider = ({children})=>{
         try {
             const { data } = await axios.get('/api/atm/check-balance');
             setBalance(data.balance);
-            toast.success(data.message);
             setLoading(false);
         } catch (error) {
             toast.error(error.response.data.message)
