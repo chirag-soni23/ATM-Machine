@@ -1,14 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { UserData } from '../context/UserContext';
 import { AtmData } from '../context/AtmContext';
 import avatar from '../assets/avatar.png';
 
 const Home = () => {
   const { user } = UserData();
-  const { depositMoney } = AtmData();
+  const { balance, checkBalance, depositMoney, loading } = AtmData(); 
   const [depositAmount, setDepositAmount] = useState('');
 
-  function handlerSubmit(e) {
+  useEffect(() => {
+    checkBalance();
+  }, []);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const amount = parseFloat(depositAmount);
@@ -17,9 +21,9 @@ const Home = () => {
       return;
     }
 
-    depositMoney(amount);
+    await depositMoney(amount); 
     setDepositAmount('');
-  }
+  };
 
   return (
     <div className="mt-[4rem]">
@@ -35,18 +39,25 @@ const Home = () => {
         </div>
         <div className="card-body">
           <h2 className="card-title">Current Balance</h2>
-          <p>₹ {user?.balance ?? '0.00'}</p> 
+          <p className="text-base font-semibold">
+            ₹ {loading ? 'Loading...' : balance.toFixed(2)}
+          </p>
           <div className="card-actions justify-end">
-            <form onSubmit={handlerSubmit} className="flex gap-4">
+            <form onSubmit={handleSubmit} className="flex gap-4">
               <input
                 value={depositAmount}
                 onChange={(e) => setDepositAmount(e.target.value)}
                 type="number"
                 placeholder="Enter amount"
                 className="input input-bordered w-full max-w-xs"
+                disabled={loading} 
               />
-              <button type="submit" className="btn btn-primary">
-                Deposit
+              <button
+                type="submit"
+                className={`btn btn-primary ${loading ? 'btn-disabled' : ''}`}
+                disabled={loading} 
+              >
+                {loading ? 'Processing...' : 'Deposit'}
               </button>
             </form>
           </div>
