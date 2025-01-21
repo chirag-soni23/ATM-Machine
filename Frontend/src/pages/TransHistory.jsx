@@ -37,28 +37,41 @@ const TransHistory = () => {
     }
   };
 
+  const formatTimestamp = (timestamp) => {
+    const date = new Date(timestamp);
+    return date.toLocaleString('en-US', {
+      weekday: 'short', // Sun, Mon, etc.
+      year: 'numeric',
+      month: 'short', // Jan, Feb, etc.
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true,
+    });
+  };
+
   return (
     <div className="overflow-x-auto mt-[4rem]">
       {/* Search Input */}
       <div className='w-full flex justify-between items-center p-4 gap-4'>
-      <div className="mb-4">
-        <input
-          type="text"
-          placeholder="Search by Name"
-          className="input input-bordered w-full max-w-xs"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)} 
-        />
-      </div>
+        <div className="mb-4">
+          <input
+            type="text"
+            placeholder="Search by Name"
+            className="input input-bordered w-full max-w-xs"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)} 
+          />
+        </div>
 
-      <div className="mb-4">
-        <button 
-          onClick={handleDeleteAll} 
-          className="btn btn-danger"
-        >
-          Delete All Transactions
-        </button>
-      </div>
+        <div className="mb-4">
+          <button 
+            onClick={handleDeleteAll} 
+            className="btn btn-danger"
+          >
+            Delete All Transactions
+          </button>
+        </div>
       </div>
 
       <table className="table">
@@ -89,7 +102,7 @@ const TransHistory = () => {
                 <td>{transaction.amount}</td>
                 <td>{transaction.type}</td>
                 <td>{transaction.status}</td>
-                <td>{new Date(transaction.timestamp).toLocaleString()}</td>
+                <td>{formatTimestamp(transaction.timestamp)}</td>
                 <td>
                   <button 
                     onClick={() => {
