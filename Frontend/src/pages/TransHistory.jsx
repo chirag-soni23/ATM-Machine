@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { AtmData } from '../context/AtmContext';
 import { Trash2 } from 'lucide-react';
+import { Loading } from '../components/Loading';
 
 const TransHistory = () => {
   const { transactions, fetchTransactionHistory, loading, deleteTransactionHistory } = AtmData();
@@ -26,7 +27,7 @@ const TransHistory = () => {
   }, [searchQuery, transactions]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div><Loading/></div>;
   }
 
   // Handle delete all transactions
