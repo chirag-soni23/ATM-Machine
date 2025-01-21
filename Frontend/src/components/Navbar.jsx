@@ -1,9 +1,9 @@
 import { Link, useNavigate } from "react-router-dom";
-import { CreditCard, History, LogOut, Settings, User } from "lucide-react";
+import { CreditCard, History, LogOut, Settings, User, Users } from "lucide-react";
 import { UserData } from "../context/UserContext";
 
 const Navbar = () => {
-  const {logout} = UserData()
+  const {logout,user} = UserData()
   const navigate = useNavigate()
   function logoutHandler(){
     logout()
@@ -27,6 +27,7 @@ const Navbar = () => {
           </div>
 
           <div className="flex items-center gap-2">
+            {/* settings */}
             <Link
               to="/settings"
               className={`
@@ -37,6 +38,8 @@ const Navbar = () => {
               <Settings className="w-4 h-4" />
               <span className="hidden sm:inline">Settings</span>
             </Link>
+
+            {/* profile */}
             <Link
               to="/profile"
               className={`
@@ -47,6 +50,8 @@ const Navbar = () => {
               <User className="w-4 h-4" />
               <span className="hidden sm:inline">Profile</span>
             </Link>
+
+            {/* transaction history */}
             <Link
               to="/transaction-history"
               className={`
@@ -56,6 +61,18 @@ const Navbar = () => {
             >
               <History className="w-4 h-4" />
               <span className="hidden sm:inline">Transaction Hitory</span>
+            </Link>
+
+            {/* all users */}
+            <Link
+              to="/all-users"
+              className={`${user.isAdmin ? "":"hidden"}
+              btn btn-sm gap-2 transition-colors
+              
+              `}
+            >
+              <Users className="w-4 h-4" />
+              <span className="hidden sm:inline">All Users</span>
             </Link>
 
             <button className="flex gap-2 items-center" onClick={logoutHandler}>
