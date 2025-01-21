@@ -18,11 +18,9 @@ export const AtmProvider = ({children})=>{
         setLoading(true)
         try {
             const { data } = await axios.post('/api/atm/deposit',{amount});
+            fetchTransactionHistory();
             setBalance(data.balance);
             toast.success(data.message);
-            fetchTransactionHistory()
-            setLoading(false)
-
         } catch (error) {
             toast.error(error.response.data.message)
             setLoading(false);            
@@ -102,10 +100,13 @@ export const AtmProvider = ({children})=>{
           const { data } = await axios.post('/api/atm/delete_transaction_history', { transactionId, deleteAll });
           if (deleteAll) {
             setTransactions([]);
+            setLoading(false);
           } else {
             setTransactions(prevTransactions => prevTransactions.filter(transaction => transaction._id !== transactionId)); 
+            setLoading(false);
           }
           toast.success(data.message);
+          setLoading(false);
         } catch (error) {
           toast.error(error.response.data.message);
         } 

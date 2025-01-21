@@ -11,14 +11,12 @@ const Home = () => {
   function handlerSubmit(e) {
     e.preventDefault();
 
-    // Validate deposit amount
     const amount = parseFloat(depositAmount);
     if (isNaN(amount) || amount <= 0) {
       alert('Please enter a valid amount greater than 0.');
       return;
     }
 
-    // Call depositMoney function and reset input
     depositMoney(amount);
     setDepositAmount('');
   }
@@ -29,7 +27,7 @@ const Home = () => {
         <div className="flex flex-col gap-2 items-center p-4">
           <img
             className="w-24 h-24 rounded-full"
-            src={user?.image?.url || avatar} // Fallback to avatar if user.image.url is undefined
+            src={user?.image?.url || avatar}
             alt="User Avatar"
           />
           <h1 className="text-lg font-bold">{user?.name || 'User Name'}</h1>
@@ -37,12 +35,12 @@ const Home = () => {
         </div>
         <div className="card-body">
           <h2 className="card-title">Current Balance</h2>
-          <p>₹ {user?.balance ?? '0.00'}</p> {/* Fallback balance */}
+          <p>₹ {user?.balance ?? '0.00'}</p> 
           <div className="card-actions justify-end">
             <form onSubmit={handlerSubmit} className="flex gap-4">
               <input
                 value={depositAmount}
-                onChange={(e) => setDepositAmount(e.target.value)} // Update state correctly
+                onChange={(e) => setDepositAmount(e.target.value)}
                 type="number"
                 placeholder="Enter amount"
                 className="input input-bordered w-full max-w-xs"
