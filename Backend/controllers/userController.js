@@ -53,6 +53,15 @@ export const userProfile = TryCatch(async(req,res)=>{
     res.json(user);
 })
 
+// get all users
+export const allUsers = TryCatch(async (req, res) => {
+    const users = await User.find().select("-password");
+    res.json({
+        message: "All users fetched successfully!",
+        users,
+    });
+});
+
 // logout
 export const logout = TryCatch(async(req,res)=>{
     res.cookie("token","",{maxAge:0});
