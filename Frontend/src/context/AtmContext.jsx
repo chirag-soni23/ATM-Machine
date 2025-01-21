@@ -17,7 +17,7 @@ export const AtmProvider = ({children})=>{
         }
         setLoading(true)
         try {
-            const { data } = await axios.post('/api/user/deposit',{amount});
+            const { data } = await axios.post('/api/atm/deposit',{amount});
             setBalance(data.balance);
             toast.success(data.message);
             fetchTransactionHistory()
@@ -37,7 +37,7 @@ export const AtmProvider = ({children})=>{
         }
         setLoading(true);
         try {
-            const { data } = await axios.post('/api/user/withdraw',{amount});
+            const { data } = await axios.post('/api/atm/withdraw',{amount});
             setBalance(data.balance);
             toast.success(data.message);
             fetchTransactionHistory();
