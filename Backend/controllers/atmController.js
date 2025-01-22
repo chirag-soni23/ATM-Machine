@@ -158,7 +158,7 @@ export const transferMoney = TryCatch(async (req, res) => {
     });
 
     res.json({
-        message: "Transfer successful!",
+        message: `Transfer successful to ${targetUser.name}`,
         sourceBalance: sourceUser.balance,
         targetUser: {
             id: targetUser._id,
