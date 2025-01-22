@@ -165,13 +165,13 @@ const Profile = () => {
                   />
                   <button
                     onClick={saveChanges}
-                    className="px-3 py-1 bg-green-500 text-white rounded-lg"
+                    className="btn btn-success"
                   >
                     Save
                   </button>
                   <button
                     onClick={() => setEditField(null)}
-                    className="px-3 py-1 bg-red-500 text-white rounded-lg"
+                    className="btn btn-warning"
                   >
                     Cancel
                   </button>
@@ -204,13 +204,13 @@ const Profile = () => {
                   />
                   <button
                     onClick={saveChanges}
-                    className="px-3 py-1 bg-green-500 text-white rounded-lg"
+                    className="btn btn-success"
                   >
                     Save
                   </button>
                   <button
                     onClick={() => setEditField(null)}
-                    className="px-3 py-1 bg-red-500 text-white rounded-lg"
+                    className="btn btn-warning"
                   >
                     Cancel
                   </button>
