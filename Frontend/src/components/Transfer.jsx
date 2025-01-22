@@ -18,11 +18,6 @@ const Transfer = () => {
       return;
     }
 
-    if (recipientNumber === user?.mobileNumber) {
-      alert('You cannot transfer money to yourself.');
-      return;
-    }
-
     await transferMoney(recipientNumber, parseFloat(transferAmount));
 
     // Reset fields after successful transfer
