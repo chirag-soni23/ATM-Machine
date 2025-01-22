@@ -5,7 +5,7 @@ import avatar from '../assets/avatar.png';
 
 const Deposit = () => {
     const { user } = UserData();
-    const { balance, checkBalance, depositMoney, loading } = AtmData();
+    const { balance, checkBalance, depositMoney, isDepositLoading } = AtmData();
     const [depositAmount, setDepositAmount] = useState('');
 
     useEffect(() => {
@@ -38,7 +38,7 @@ const Deposit = () => {
             <div className="card-body">
                 <h2 className="card-title">Current Balance</h2>
                 <p className="text-base font-semibold">
-                    ₹ {loading ? balance.toFixed(2) : balance.toFixed(2)}
+                    ₹ {isDepositLoading ? balance.toFixed(2) : balance.toFixed(2)}
                 </p>
                 <div className="card-actions justify-end">
                     <form onSubmit={handleSubmit} className="flex gap-4">
@@ -48,14 +48,14 @@ const Deposit = () => {
                             type="number"
                             placeholder="Enter amount"
                             className="input input-bordered w-full max-w-xs"
-                            disabled={loading}
+                            disabled={isDepositLoading}
                         />
                         <button
                             type="submit"
-                            className={`btn btn-primary ${loading ? 'btn-disabled' : ''}`}
-                            disabled={loading}
+                            className={`btn btn-primary ${isDepositLoading ? 'btn-disabled' : ''}`}
+                            disabled={isDepositLoading}
                         >
-                            {loading ? 'Processing...' : 'Deposit'}
+                            {isDepositLoading ? 'Processing...' : 'Deposit'}
                         </button>
                     </form>
                 </div>

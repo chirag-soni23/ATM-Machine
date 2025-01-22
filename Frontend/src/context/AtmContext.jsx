@@ -8,6 +8,8 @@ export const AtmProvider = ({children})=>{
     const [balance,setBalance] = useState(0);
     const [transactions,setTransactions] = useState([])
     const [loading,setLoading] = useState(false);
+    const [isDepositLoading,setIsDepositLoading] = useState(false);
+    const [isWithdrawLoading,setIsWithdrawLoading] = useState(false);
 
     // deposit money
     async function depositMoney(amount){
@@ -15,14 +17,15 @@ export const AtmProvider = ({children})=>{
             toast.error("Amount must be greater than zero.")
             return;
         }
-        setLoading(true)
+        setIsDepositLoading(true);
         try {
             const { data } = await axios.post('/api/atm/deposit',{amount});
             fetchTransactionHistory();
             setBalance(data.balance);
+            setIsDepositLoading(false);
         } catch (error) {
             toast.error(error.response.data.message)
-            setLoading(false);            
+            setIsDepositLoading(false);            
         }
     }
 
@@ -32,16 +35,16 @@ export const AtmProvider = ({children})=>{
             toast.error("Amount must be greater than zero.")
             return;
         }
-        setLoading(true);
+        setIsWithdrawLoading(true);
         try {
             const { data } = await axios.post('/api/atm/withdraw',{amount});
             setBalance(data.balance);
             toast.success(data.message);
             fetchTransactionHistory();
-            setLoading(false);           
+            setIsWithdrawLoading(false);           
         } catch (error) {
             toast.error(error.response.data.message)
-            setLoading(false);                        
+            setIsWithdrawLoading(false);                        
         }
     }
 
@@ -117,7 +120,7 @@ export const AtmProvider = ({children})=>{
     // },[])
 
     return(
-        <AtmContext.Provider value={{balance,transactions,loading,depositMoney,withdrawMoney,fetchTransactionHistory,checkBalance,transferMoney,deleteTransactionHistory}}>
+        <AtmContext.Provider value={{balance,transactions,loading,depositMoney,withdrawMoney,fetchTransactionHistory,checkBalance,transferMoney,deleteTransactionHistory,isDepositLoading,isWithdrawLoading}}>
             {children}
         </AtmContext.Provider>
     )

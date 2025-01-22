@@ -1,49 +1,26 @@
-import { Camera, Mail, Phone, User } from "lucide-react";
+import { Camera, Loader2, Mail, Pencil, Phone, User } from "lucide-react";
 import { UserData } from "../context/UserContext";
 import { useState } from "react";
-import avatar from '../assets/avatar.png'
-
-// Modal Component with Animations and Styling
-const Modal = ({ isOpen, onClose, imageUrl }) => {
-  if (!isOpen) return null;
-
-  return (
-    <div
-      className="fixed p-4 inset-0 flex items-center justify-center bg-black bg-opacity-70 z-50"
-      onClick={onClose}
-    >
-      <div
-        className="bg-gray-100 p-4 rounded-lg relative max-w-lg"
-        onClick={(e) => e.stopPropagation()} 
-      >
-        <button
-          className="absolute top-0 right-0 text-2xl text-gray-600 hover:text-black transition-all"
-          onClick={onClose}
-        >
-          &times;
-        </button>
-        <img
-          src={imageUrl}
-          alt="Profile"
-          className="w-full h-auto max-h-96 object-cover rounded-lg shadow-xl"
-        />
-      </div>
-    </div>
-  );
-};
+import avatar from "../assets/avatar.png";
 
 const Profile = () => {
-  const { user, updateProfilePic, btnLoading } = UserData();
+  const { user, editProfile, updateProfilePic, btnLoading } = UserData();
   const [uploading, setUploading] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false); 
+  const [editField, setEditField] = useState(null); // Track which field is being edited
+  const [formData, setFormData] = useState({
+    name: user.name || "",
+    email: user.email || "",
+    mobileNumber: user.mobileNumber || "",
+  });
 
+  // Handle image upload
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
 
     setUploading(true);
     try {
-      await updateProfilePic(file); 
+      await updateProfilePic(file);
     } catch (error) {
       console.error("Error uploading image:", error);
     } finally {
@@ -51,8 +28,21 @@ const Profile = () => {
     }
   };
 
-  const openModal = () => setIsModalOpen(true); 
-  const closeModal = () => setIsModalOpen(false); 
+  // Handle field change
+  const handleFieldChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  // Save field changes
+  const saveChanges = async () => {
+    try {
+      await editProfile(formData);
+      setEditField(null); 
+    } catch (error) {
+      console.error("Error updating user data:", error);
+    }
+  };
 
   return (
     <div className="h-full pt-20">
@@ -70,17 +60,12 @@ const Profile = () => {
                 src={user.image?.url || avatar}
                 alt="Profile"
                 className="size-32 rounded-full object-cover border-4 cursor-pointer transition-transform transform hover:scale-110"
-                onClick={openModal} // Open modal on image click
               />
               <label
                 htmlFor="avatar-upload"
-                className={`
-                  absolute bottom-0 right-0 
-                  bg-base-content hover:scale-105
-                  p-2 rounded-full cursor-pointer 
-                  transition-all duration-200
-                  ${uploading || btnLoading ? "opacity-50 pointer-events-none" : ""}
-                `}
+                className={`absolute bottom-0 right-0 bg-base-content hover:scale-105 p-2 rounded-full cursor-pointer transition-all duration-200 ${
+                  uploading || btnLoading ? "opacity-50 pointer-events-none" : ""
+                }`}
               >
                 <Camera className="w-5 h-5 text-base-200" />
                 <input
@@ -89,12 +74,12 @@ const Profile = () => {
                   className="hidden"
                   accept="image/*"
                   onChange={handleImageUpload}
-                  disabled={uploading || btnLoading}
+                  disabled={uploading}
                 />
               </label>
             </div>
             <p className="text-sm text-zinc-400">
-              {uploading || btnLoading
+              {uploading
                 ? "Uploading..."
                 : "Click the camera icon to update your photo"}
             </p>
@@ -102,40 +87,126 @@ const Profile = () => {
 
           {/* User information */}
           <div className="space-y-6">
+            {/* Full Name */}
             <div className="space-y-1.5">
               <div className="text-sm text-zinc-400 flex items-center gap-2">
                 <User className="w-4 h-4" />
                 Full Name
               </div>
-              <p className="px-4 py-2.5 bg-base-200 rounded-lg border">
-                {user.name || "N/A"}
-              </p>
+              {editField === "name" ? (
+                <div className="flex items-center gap-2">
+                  <input
+                    type="text"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleFieldChange}
+                    className="px-4 py-2 bg-base-200 rounded-lg border flex-grow"
+                  />
+                  <button
+                  disabled={btnLoading}
+                    onClick={saveChanges}
+                    className="btn btn-success"
+                  >
+                    {btnLoading ? <Loader2/> : "Save"}
+                  </button>
+                  <button
+                    onClick={() => setEditField(null)}
+                    className="btn btn-warning"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              ) : (
+                <p className="flex items-center justify-between px-4 py-2.5 bg-base-200 rounded-lg border">
+                  {btnLoading ? "Loading..." : user.name || "N/A"}
+                  <Pencil
+                    className="w-4 h-4 cursor-pointer"
+                    onClick={() => setEditField("name")}
+                  />
+                </p>
+              )}
             </div>
 
+            {/* Email Address */}
             <div className="space-y-1.5">
               <div className="text-sm text-zinc-400 flex items-center gap-2">
                 <Mail className="w-4 h-4" />
                 Email Address
               </div>
-              <p className="px-4 py-2.5 bg-base-200 rounded-lg border">
-                {user.email || "N/A"}
-              </p>
+              {editField === "email" ? (
+                <div className="flex items-center gap-2">
+                  <input
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleFieldChange}
+                    className="px-4 py-2 bg-base-200 rounded-lg border flex-grow"
+                  />
+                  <button
+                    onClick={saveChanges}
+                    className="px-3 py-1 bg-green-500 text-white rounded-lg"
+                  >
+                    Save
+                  </button>
+                  <button
+                    onClick={() => setEditField(null)}
+                    className="px-3 py-1 bg-red-500 text-white rounded-lg"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              ) : (
+                <p className="flex items-center justify-between px-4 py-2.5 bg-base-200 rounded-lg border">
+                  {user.email || "N/A"}
+                  <Pencil
+                    className="w-4 h-4 cursor-pointer"
+                    onClick={() => setEditField("email")}
+                  />
+                </p>
+              )}
             </div>
+
+            {/* Mobile Number */}
             <div className="space-y-1.5">
               <div className="text-sm text-zinc-400 flex items-center gap-2">
                 <Phone className="w-4 h-4" />
                 Mobile Number
               </div>
-              <p className="px-4 py-2.5 bg-base-200 rounded-lg border">
-                {user.mobileNumber || "N/A"}
-              </p>
+              {editField === "mobileNumber" ? (
+                <div className="flex items-center gap-2">
+                  <input
+                    type="text"
+                    name="mobileNumber"
+                    value={formData.mobileNumber}
+                    onChange={handleFieldChange}
+                    className="px-4 py-2 bg-base-200 rounded-lg border flex-grow"
+                  />
+                  <button
+                    onClick={saveChanges}
+                    className="px-3 py-1 bg-green-500 text-white rounded-lg"
+                  >
+                    Save
+                  </button>
+                  <button
+                    onClick={() => setEditField(null)}
+                    className="px-3 py-1 bg-red-500 text-white rounded-lg"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              ) : (
+                <p className="flex items-center justify-between px-4 py-2.5 bg-base-200 rounded-lg border">
+                  {user.mobileNumber || "N/A"}
+                  <Pencil
+                    className="w-4 h-4 cursor-pointer"
+                    onClick={() => setEditField("mobileNumber")}
+                  />
+                </p>
+              )}
             </div>
           </div>
         </div>
       </div>
-
-      {/* Modal to display profile picture */}
-      <Modal isOpen={isModalOpen} onClose={closeModal} imageUrl={user.image?.url || "/default-avatar.png"} />
     </div>
   );
 };

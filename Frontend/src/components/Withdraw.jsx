@@ -3,7 +3,7 @@ import { AtmData } from '../context/AtmContext';
 import { HandCoins } from 'lucide-react';
 
 const Withdraw = () => {
-  const { balance, loading, withdrawMoney } = AtmData();
+  const { balance,withdrawMoney,isWithdrawLoading} = AtmData();
   const [iswithdrawMoney, setWithdrawMoney] = useState("");
 
   const handleSubmit = async (e) => {
@@ -25,7 +25,7 @@ const Withdraw = () => {
           <HandCoins className='w-10 h-10' />
           <h2 className="card-title">WithDraw</h2>
           <p className="text-base font-semibold">
-            ₹ {loading ? balance.toFixed(2) : balance.toFixed(2)}
+            ₹ {isWithdrawLoading ? balance.toFixed(2) : balance.toFixed(2)}
           </p>
         </div>
         <div className="card-body">
@@ -37,14 +37,14 @@ const Withdraw = () => {
                 type="number"
                 placeholder="Enter amount"
                 className="input input-bordered w-full max-w-xs"
-                disabled={loading}
+                disabled={isWithdrawLoading}
               />
               <button
                 type="submit"
-                className={`btn btn-primary ${loading ? 'btn-disabled' : ''}`}
-                disabled={loading}
+                className={`btn btn-primary ${isWithdrawLoading ? 'btn-disabled' : ''}`}
+                disabled={isWithdrawLoading}
               >
-                {loading ? 'Processing...' : 'Withdraw'}
+                {isWithdrawLoading ? 'Processing...' : 'Withdraw'}
               </button>
             </form>
           </div>
