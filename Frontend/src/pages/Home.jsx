@@ -27,7 +27,7 @@ const Home = () => {
   };
 
   return (
-    <div className="mt-[4rem]">
+    <div className="mt-[4rem] h-screen flex flex-col gap-10">
       <div className="card lg:card-side bg-base-100 shadow-xl">
         <div className="flex flex-col gap-2 items-center p-4">
           <img
