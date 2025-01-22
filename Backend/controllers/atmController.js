@@ -163,7 +163,7 @@ export const transferMoney = TryCatch(async (req, res) => {
         targetUser: {
             id: targetUser._id,
             name: targetUser.name,
-            mobileNumber: targetUser.mobileNumber, // Send mobile number as part of the response
+            mobileNumber: targetUser.mobileNumber, 
         },
     });
 });
