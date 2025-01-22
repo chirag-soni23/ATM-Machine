@@ -70,6 +70,7 @@ export const logout = TryCatch(async(req,res)=>{
     })
 })
 
+// update profile picture
 export const updateProfilePic = TryCatch(async (req, res) => {
     const user = await User.findById(req.user._id);
     if (!user) {
@@ -106,3 +107,40 @@ export const updateProfilePic = TryCatch(async (req, res) => {
         image: user.image,
     });
 });
+
+// edit profile
+export const editProfile = TryCatch(async(req,res)=>{
+    const {name,email,mobileNumber} = req.body;
+    const user = await User.findById(req.user._id);
+
+    if (!user) {
+        return res.status(404).json({ message: "User not found." });
+    }
+
+    if (name) user.name = name;
+    if (email) {
+        const emailExists = await User.findOne({ email, _id: { $ne: user._id } });
+        if (emailExists) {
+            return res.status(400).json({ message: "Email already in use." });
+        }
+        user.email = email;
+    }
+
+    if (mobileNumber) {
+        const mobileExists = await User.findOne({
+            mobileNumber,
+            _id: { $ne: user._id },
+        });
+        if (mobileExists) {
+            return res.status(400).json({ message: "Mobile number already in use." });
+        }
+        user.mobileNumber = mobileNumber;
+    }
+
+    await user.save();
+
+    res.json({
+        message: "Profile updated successfully!",
+        user,
+    });
+})

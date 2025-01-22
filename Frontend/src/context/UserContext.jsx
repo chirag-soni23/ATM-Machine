@@ -117,11 +117,31 @@ export const UserProvider = ({ children }) => {
                 image: data.image,
             }));
         } catch (error) {
-            toast.error(
-                error.response?.data?.message || "Failed to update profile picture."
-            );
+            toast.error(error.response?.data?.message);
         } finally {
             setBtnLoading(false);
+        }
+    }
+
+    // edit profile
+    async function editProfile({name,email,mobileNumber}){
+        setBtnLoading(true);
+        try {
+            const { data } = await axios.put("/api/user/edit-profile", {
+                name,
+                email,
+                mobileNumber,
+            });
+
+            toast.success(data.message);
+            setUser((prev) => ({
+                ...prev,
+                ...data.user, 
+            })); 
+            setBtnLoading(false);           
+        } catch (error) {
+            toast.error(error.response?.data?.message); 
+            setBtnLoading(false);       
         }
     }
 
@@ -139,6 +159,7 @@ export const UserProvider = ({ children }) => {
                 allUsers,
                 loading,
                 isLoading,
+                editProfile
             }}
         >
             {children}
