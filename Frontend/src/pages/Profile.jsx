@@ -12,6 +12,7 @@ const Profile = () => {
     email: user.email || "",
     mobileNumber: user.mobileNumber || "",
   });
+  const [isModalOpen, setIsModalOpen] = useState(false); // Modal state
 
   // Handle image upload
   const handleImageUpload = async (e) => {
@@ -38,7 +39,7 @@ const Profile = () => {
   const saveChanges = async () => {
     try {
       await editProfile(formData);
-      setEditField(null); 
+      setEditField(null);
     } catch (error) {
       console.error("Error updating user data:", error);
     }
@@ -60,6 +61,7 @@ const Profile = () => {
                 src={user.image?.url || avatar}
                 alt="Profile"
                 className="size-32 rounded-full object-cover border-4 cursor-pointer transition-transform transform hover:scale-110"
+                onClick={() => setIsModalOpen(true)} // Open modal on click
               />
               <label
                 htmlFor="avatar-upload"
@@ -85,6 +87,25 @@ const Profile = () => {
             </p>
           </div>
 
+          {/* Modal */}
+          {isModalOpen && (
+            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+              <div className="bg-white rounded-lg p-4 relative max-w-md w-full">
+                <button
+                  className="absolute top-2 right-2 text-gray-500 hover:text-gray-800"
+                  onClick={() => setIsModalOpen(false)}
+                >
+                  ✕
+                </button>
+                <img
+                  src={user.image?.url || avatar}
+                  alt="Profile"
+                  className="rounded-lg max-w-full max-h-[80vh]"
+                />
+              </div>
+            </div>
+          )}
+
           {/* User information */}
           <div className="space-y-6">
             {/* Full Name */}
@@ -103,11 +124,11 @@ const Profile = () => {
                     className="px-4 py-2 bg-base-200 rounded-lg border flex-grow"
                   />
                   <button
-                  disabled={btnLoading}
+                    disabled={btnLoading}
                     onClick={saveChanges}
                     className="btn btn-success"
                   >
-                    {btnLoading ? <Loader2/> : "Save"}
+                    {btnLoading ? <Loader2 /> : "Save"}
                   </button>
                   <button
                     onClick={() => setEditField(null)}
