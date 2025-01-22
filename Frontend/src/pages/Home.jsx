@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { UserData } from '../context/UserContext';
 import { AtmData } from '../context/AtmContext';
 import avatar from '../assets/avatar.png';
+import Withdraw from '../components/Withdraw';
 
 const Home = () => {
   const { user } = UserData();
@@ -63,6 +64,7 @@ const Home = () => {
           </div>
         </div>
       </div>
+      <Withdraw/>
     </div>
   );
 };
