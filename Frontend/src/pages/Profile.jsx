@@ -1,4 +1,4 @@
-import { Camera, Loader2, Mail, Pencil, Phone, User } from "lucide-react";
+import { Camera, DoorClosed, Loader2, Mail, Pencil, Phone, User } from "lucide-react";
 import { UserData } from "../context/UserContext";
 import { useState } from "react";
 import avatar from "../assets/avatar.png";
@@ -61,7 +61,7 @@ const Profile = () => {
                 src={user.image?.url || avatar}
                 alt="Profile"
                 className="size-32 rounded-full object-cover border-4 cursor-pointer transition-transform transform hover:scale-110"
-                onClick={() => setIsModalOpen(true)} // Open modal on click
+                onClick={() => setIsModalOpen(true)} 
               />
               <label
                 htmlFor="avatar-upload"
@@ -89,18 +89,18 @@ const Profile = () => {
 
           {/* Modal */}
           {isModalOpen && (
-            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-              <div className="bg-white rounded-lg p-4 relative max-w-md w-full">
+            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 p-4 h-screen">
+              <div className="rounded-lg bg-white p-[0.10rem] relative max-w-md w-full">
                 <button
-                  className="absolute top-2 right-2 text-gray-500 hover:text-gray-800"
+                  className="absolute top-2 right-2 text-accent"
                   onClick={() => setIsModalOpen(false)}
                 >
-                  ✕
+                  ✕ 
                 </button>
                 <img
                   src={user.image?.url || avatar}
                   alt="Profile"
-                  className="rounded-lg max-w-full max-h-[80vh]"
+                  className="rounded-lg w-full max-h-[80vh]"
                 />
               </div>
             </div>
