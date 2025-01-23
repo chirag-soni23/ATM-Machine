@@ -1,4 +1,4 @@
-import { Camera, DoorClosed, Loader2, Mail, Pencil, Phone, User } from "lucide-react";
+import { Camera, Loader2, Mail, Pencil, Phone, User } from "lucide-react";
 import { UserData } from "../context/UserContext";
 import { useState } from "react";
 import avatar from "../assets/avatar.png";
@@ -6,15 +6,14 @@ import avatar from "../assets/avatar.png";
 const Profile = () => {
   const { user, editProfile, updateProfilePic, btnLoading } = UserData();
   const [uploading, setUploading] = useState(false);
-  const [editField, setEditField] = useState(null); // Track which field is being edited
+  const [editField, setEditField] = useState(null); 
   const [formData, setFormData] = useState({
     name: user.name || "",
     email: user.email || "",
     mobileNumber: user.mobileNumber || "",
   });
-  const [isModalOpen, setIsModalOpen] = useState(false); // Modal state
+  const [isModalOpen, setIsModalOpen] = useState(false); 
 
-  // Handle image upload
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -139,7 +138,7 @@ const Profile = () => {
                 </div>
               ) : (
                 <p className="flex items-center justify-between px-4 py-2.5 bg-base-200 rounded-lg border">
-                  {btnLoading ? "Loading..." : user.name || "N/A"}
+                  {user.name}
                   <Pencil
                     className="w-4 h-4 cursor-pointer"
                     onClick={() => setEditField("name")}
@@ -164,10 +163,11 @@ const Profile = () => {
                     className="px-4 py-2 bg-base-200 rounded-lg border flex-grow"
                   />
                   <button
+                    disabled={btnLoading}
                     onClick={saveChanges}
                     className="btn btn-success"
                   >
-                    Save
+                    {btnLoading ? <Loader2 /> : "Save"}
                   </button>
                   <button
                     onClick={() => setEditField(null)}
@@ -203,10 +203,11 @@ const Profile = () => {
                     className="px-4 py-2 bg-base-200 rounded-lg border flex-grow"
                   />
                   <button
+                    disabled={btnLoading}
                     onClick={saveChanges}
                     className="btn btn-success"
                   >
-                    Save
+                    {btnLoading ? <Loader2 /> : "Save"}
                   </button>
                   <button
                     onClick={() => setEditField(null)}
