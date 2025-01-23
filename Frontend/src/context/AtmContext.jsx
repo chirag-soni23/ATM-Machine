@@ -22,6 +22,7 @@ export const AtmProvider = ({children})=>{
             const { data } = await axios.post('/api/atm/deposit',{amount});
             fetchTransactionHistory();
             setBalance(data.balance);
+            toast.success(data.message);
             setIsDepositLoading(false);
         } catch (error) {
             toast.error(error.response.data.message)
