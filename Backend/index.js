@@ -9,7 +9,7 @@ import cors from 'cors';
 import path from 'path';
 
 const app = express();
-const PORT = 5000;
+const PORT = 5000 || process.env.PORT;
 
 dotenv.config();
 
