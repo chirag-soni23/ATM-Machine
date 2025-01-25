@@ -6,6 +6,7 @@ import atmRoutes from './routes/atmRoutes.js';
 import cookieParser from 'cookie-parser'
 import cloudinary from 'cloudinary'
 import cors from 'cors';
+import path from 'path';
 
 const app = express();
 const PORT = 5000;
@@ -35,6 +36,11 @@ app.use(cookieParser())
 app.use('/api/user',userRoutes);
 app.use('/api/atm',atmRoutes);
 
+const __dirname = path.resolve();
+app.use(express.static(path.join(__dirname,"/Frontend/dist")))
+app.get("*",(req,res)=>{
+    res.sendFile(path.join(__dirname,"Frontend","dist","index.html"))
+})
 
 // server
 app.listen(PORT,()=>{
