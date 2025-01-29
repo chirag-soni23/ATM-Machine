@@ -2,11 +2,11 @@
   "name": "backend",
   "version": "1.0.0",
   "main": "index.js",
-  "type":"module",
+  "type": "module",
   "scripts": {
     "start": "node Backend/index.js",
-    "dev":"nodemon Backend/index.js",
-     "build":"npm install && cd Frontend && npm install && npm run build"
+    "dev": "nodemon Backend/index.js",
+    "build": "npm install && cd Frontend && npm install && npm run build"
   },
   "keywords": [],
   "author": "",
@@ -15,6 +15,7 @@
   "dependencies": {
     "bcrypt": "^5.1.1",
     "cloudinary": "^2.5.1",
+    "compression": "^1.7.5",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "datauri": "^4.1.0",
