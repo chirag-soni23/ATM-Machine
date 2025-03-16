@@ -33,7 +33,6 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(compression());
 
-
 // routes
 app.use('/api/user',userRoutes);
 app.use('/api/atm',atmRoutes);
